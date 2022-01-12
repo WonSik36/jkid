@@ -21,7 +21,7 @@ private fun StringBuilder.serializeObjectWithoutAnnotation(obj: Any) {
 
 private fun StringBuilder.serializeObject(obj: Any) {
     obj.javaClass.kotlin.memberProperties
-            .filter { it.findAnnotation<JsonExclude>() == null }
+            .filter { it.findAnnotation<JsonExclude>() == null }    // @JsonExclude 제외
             .joinToStringBuilder(this, prefix = "{", postfix = "}") {
                 serializeProperty(it, obj)
             }
@@ -31,21 +31,21 @@ private fun StringBuilder.serializeProperty(
         prop: KProperty1<Any, *>, obj: Any
 ) {
     val jsonNameAnn = prop.findAnnotation<JsonName>()
-    val propName = jsonNameAnn?.name ?: prop.name
+    val propName = jsonNameAnn?.name ?: prop.name   // @JsonName 적용
     serializeString(propName)
     append(": ")
 
     val value = prop.get(obj)
-    val jsonValue = prop.getSerializer()?.toJsonValue(value) ?: value
+    val jsonValue = prop.getSerializer()?.toJsonValue(value) ?: value   // serializer 존재시,
     serializePropertyValue(jsonValue)
 }
 
 fun KProperty<*>.getSerializer(): ValueSerializer<Any?>? {
     val customSerializerAnn = findAnnotation<CustomSerializer>() ?: return null
-    val serializerClass = customSerializerAnn.serializerClass
+    val serializerClass = customSerializerAnn.serializerClass   // @CustomSerializer 추출
 
-    val valueSerializer = serializerClass.objectInstance
-            ?: serializerClass.createInstance()
+    val valueSerializer = serializerClass.objectInstance    // Using Object
+            ?: serializerClass.createInstance()             // or create instance (Class)
     @Suppress("UNCHECKED_CAST")
     return valueSerializer as ValueSerializer<Any?>
 }

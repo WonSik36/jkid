@@ -27,9 +27,9 @@ fun Type.asJavaClass(): Class<Any> = when (this) {
 
 fun <T> Iterable<T>.joinToStringBuilder(stringBuilder: StringBuilder, separator: CharSequence = ", ", prefix: CharSequence = "", postfix: CharSequence = "", limit: Int = -1, truncated: CharSequence = "...", callback: ((T) -> Unit)? = null): StringBuilder {
     return joinTo(stringBuilder, separator, prefix, postfix, limit, truncated) {
-        if (callback == null) return@joinTo it.toString()
+        if (callback == null) return@joinTo it.toString()   // 'return' is not allowed here
         callback(it)
-        ""
+        ""  // callback 에서 append 호출
     }
 }
 
