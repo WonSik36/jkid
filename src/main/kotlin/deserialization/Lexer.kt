@@ -77,6 +77,7 @@ internal class CharReader(val reader: Reader) {
     }
 }
 
+// Tokenize String
 class Lexer(reader: Reader) {
     private val charReader = CharReader(reader)
 

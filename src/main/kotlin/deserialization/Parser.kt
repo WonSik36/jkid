@@ -19,9 +19,9 @@ class Parser(reader: Reader, val rootObject: JsonObject) {
                 throw MalformedJSONException("Unexpected token $token")
             }
 
-            val propName = token.value
-            expect(Token.COLON)
-            parsePropertyValue(jsonObject, propName, nextToken())
+            val propName = token.value  // name
+            expect(Token.COLON) // :
+            parsePropertyValue(jsonObject, propName, nextToken())   // value
         }
     }
 
@@ -33,7 +33,7 @@ class Parser(reader: Reader, val rootObject: JsonObject) {
 
     private fun parseCommaSeparated(stopToken: Token, body: (Token) -> Unit) {
         var expectComma = false
-        while (true) {
+        while (true) {  // one line
             var token = nextToken()
             if (token == stopToken) return
             if (expectComma) {
